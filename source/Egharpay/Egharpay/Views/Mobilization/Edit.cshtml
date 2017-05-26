@@ -1,0 +1,184 @@
+﻿@model Egharpay.Models.MobilizationViewModel
+@{
+    ViewBag.Title = string.Format("Edit Mobilization ({0})", Model.Mobilization.FirstName);
+}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>@string.Format("{0} {1} {2} {3}", Model.Mobilization.Title, Model.Mobilization.FirstName, Model.Mobilization.MiddleName, Model.Mobilization.LastName)<small>Edit mobilizer</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @if (ViewContext.ViewData.ModelState.Any(x => x.Key == ""))
+                        {
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+                                    @Html.ValidationSummary(false, null, new { @class = "row alert alert-error" })
+                                </div>
+                            </div>
+
+                        }
+                        @Html.HiddenFor(model => Model.Mobilization.MobilizationId)
+                        @Html.Partial("_Mobilization", Model)
+                        
+                        @*<div class="form-group">
+                            @Html.LabelFor(model => model.Mobilization.FollowUpDate, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+                            <div class="col-md-6 col-sm-6 col-xs-12 dob">
+                                @Html.TextBoxFor(model => model.Mobilization.FollowUpDate, "{0:dd MMMM yyyy}", new { @class = "form-control col-md-7 col-xs-12 followUpDate" })
+                                @Html.ValidationMessageFor(model => model.Mobilization.FollowUpDate, "", new { @class = "help-block" })
+                            </div>
+                        </div>*@
+
+                        @*<div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Close</label>
+                            <div class="col-md-7 col-sm-7 col-xs-12">
+                                <div id="gender" class="btn-group" data-toggle="buttons">
+                                    <label id="closeYes" class='@(Model.Mobilization.Close == "Yes" ? "btn btn-primary active" : "btn btn-default")' data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                        @Html.RadioButtonFor(model => model.Mobilization.Close, "Yes")
+                                        <input type="radio" name="close" value="Yes" data-parsley-multiple="gender"> &nbsp; Yes &nbsp;
+                                    </label>
+                                    <label id="closeNo" class='@(Model.Mobilization.Close == "No"|| Model.Mobilization.Close==null ? "btn btn-primary active" : "btn btn-default")' data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                        @Html.RadioButtonFor(model => model.Mobilization.Close, "No")
+                                        <input type="radio" name="close" value="No" data-parsley-multiple="gender"> No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group close-textbox">
+                            @Html.LabelFor(model => model.Mobilization.ClosingRemark, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                @Html.EditorFor(model => model.Mobilization.ClosingRemark, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Mobilization.ClosingRemark, "", new { @class = "help-block" })
+                            </div>
+                        </div>*@
+                        <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a href="@Url.Action("Index")" class="btn btn-primary" role="button">
+        <span class="fa fa-chevron-left"></span>&nbsp;Back to list
+    </a>
+</div>
+@section scripts {
+    <script>
+
+        $('#publicHolidayErrorSummary').hide();
+        var daterangepickerOptions = {
+            autoApply: true,
+            singleDatePicker: true,
+            showDropdowns: true,
+            showCustomRangeLabel: false,
+            opens: 'left',
+            minDate: moment().subtract('2', 'days').format('DD MMMM YYYY'),
+            maxDate: moment().format('DD MMMM YYYY'),
+            onSelect: function () {
+                selectedDate = moment().format('DD MMMM YYYY');
+            },
+            locale: {
+                "format": "DD MMMM YYYY"
+            }
+        };
+
+        var followUpDaterangepickerOptions = {
+            autoApply: true,
+            singleDatePicker: true,
+            showDropdowns: true,
+            showCustomRangeLabel: false,
+            opens: 'left',
+            minDate: moment('@Model.Mobilization.FollowUpDate.Value.AddDays(-2).ToString("dd MMMM yyyy")'),
+            onSelect: function () {
+                selectedDate = moment().format('DD MMMM YYYY');
+            },
+            locale: {
+                "format": "DD MMMM YYYY"
+            }
+        };
+
+        jQuery(function () {
+            //Generated Date
+            jQuery(".generated").daterangepicker(daterangepickerOptions);
+            $('#Mobilization_GeneratedDate').val(moment().format('DD MMMM YYYY'));
+            $(".generated").on('apply.daterangepicker',
+                function (ev, picker) {
+                    $(this).val(picker.startDate.format('DD MMMM YYYY'));
+                });
+            jQuery(".followUpDate").daterangepicker(followUpDaterangepickerOptions);
+            if ($('#Mobilization_MobilizationTypeId :selected').text() == "Event") {
+                $('.eventId').show();
+            } else {
+                $('.eventId').hide();
+            }
+        });
+
+        function phoneno() {
+            $('#phone').keypress(function (e) {
+                var a = [];
+                var k = e.which;
+
+                for (i = 48; i < 58; i++)
+                    a.push(i);
+
+                if (!(a.indexOf(k) >= 0))
+                    e.preventDefault();
+            });
+        }
+
+
+        $("#Mobilization_MobilizationTypeId").change(function () {
+            if ($('#Mobilization_MobilizationTypeId :selected').text() == "Event") {
+                $('.eventId').show();
+            } else {
+                $('.eventId').hide();
+            }
+        });
+
+        if ($('#Mobilization_MobilizationTypeId :selected').text() == "Event") {
+            $('.eventId').show();
+        } else {
+            $('.eventId').hide();
+        }
+
+        if ($('#Mobilization_InterestedCourseId :selected').text() == "Others") {
+            $('.interestedCourseId').show();
+        } else {
+            $('.interestedCourseId').hide();
+        }
+
+        $("#Mobilization_InterestedCourseId").change(function () {
+            if ($('#Mobilization_InterestedCourseId :selected').text() == "Others") {
+                $('.interestedCourseId').show();
+            } else {
+                $('.interestedCourseId').hide();
+            }
+        });
+
+        $('#closeYes').click(function () {
+            $('.close-textbox').show();
+        });
+
+        $('#closeNo').click(function () {
+            $('.close-textbox').hide();
+        });
+
+        if (!$('#Mobilization_Close').is(':checked')) {
+            $('.close-textbox').hide();
+        } else {
+            $('.close-textbox').show();
+        }
+    </script>
+}

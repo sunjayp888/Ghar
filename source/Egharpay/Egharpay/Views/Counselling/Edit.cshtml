@@ -1,0 +1,178 @@
+﻿@using Egharpay.Extensions
+@model Egharpay.Models.CounsellingViewModel
+
+@{
+    ViewBag.Title = "Edit Counselling";
+}
+<div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>@string.Format("{0} {1} {2} {3}", Model.Counselling.Enquiry.Title, Model.Counselling.Enquiry.FirstName, Model.Counselling.Enquiry.MiddleName, Model.Counselling.Enquiry.LastName)<small>Edit Counselling</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.HiddenFor(model => model.Counselling.CentreId)
+                        @Html.HiddenFor(model => model.Counselling.Enquiry.Title)
+                        @Html.AntiForgeryToken()
+                        <div class="form-horizontal">
+                            @if (ViewContext.ViewData.ModelState.Any(x => x.Key == ""))
+                            {
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+                                        @Html.ValidationSummary(false, null, new { @class = "row alert alert-error" })
+                                    </div>
+                                </div>
+
+                            }
+                            @Html.HiddenFor(model => Model.Counselling.Enquiry.Mobile)
+                            @Html.HiddenFor(model => Model.Counselling.EnquiryId)
+                            @Html.HiddenFor(model => Model.Counselling.Enquiry.EnquiryId)
+                            @Html.HiddenFor(model => Model.Counselling.Enquiry.Address1)
+                            @Html.HiddenFor(model => Model.Counselling.Enquiry.Address2)
+                            @Html.HiddenFor(model => Model.Counselling.Enquiry.Address3)
+                            @Html.HiddenFor(model => Model.Counselling.Enquiry.Address4)
+                            @Html.HiddenFor(model => Model.Counselling.Enquiry.Gender)
+                            @Html.HiddenFor(model => Model.Counselling.CentreId)
+                            @Html.HiddenFor(model => Model.Counselling.Enquiry.IntrestedCourseId)
+                            <div class="horizontal">
+                                @Html.Partial("_Counselling", Model)
+                            </div>
+                            <div class="col-md-5 col-sm-12 col-xs-12 col-md-offset-3">
+                                <div class="form-group">
+                                    <div class="pull-right">
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                        <button type="button" class="btn btn-success" ng-click="model.removeError()" data-toggle="modal" data-target="#counsellingDocumentModal">Upload Document</button>
+                                        <a href="@Url.Action("Create", "Registration", new { id = Model.Counselling.EnquiryId })" class="btn btn-primary" role="button">
+                                            Create Registration&nbsp;<span class="fa fa-chevron-right"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-controller="DocumentController as model" ng-init="model.initialise(@Model.Counselling.Enquiry.StudentCode)">
+        @Html.Partial("_Document")
+    </div>
+</div>
+
+
+<div>
+    <a href="@Url.Action("Index")" class="btn btn-primary" role="button">
+        <span class="fa fa-chevron-left"></span>&nbsp;Back to list
+    </a>
+</div>
+@section scripts {
+    <script>
+        $(function () {
+
+            if (!$('#Counselling_Close').is(':checked')) {
+                $('.closing-remarks-textbox').hide();
+            } else {
+                $('.closing-remarks-textbox').show();
+            }
+
+            $('#yesRadioButton').click(function () {
+                $('.closing-remarks-textbox').show();
+            });
+
+            $('#noRadioButton').click(function () {
+                $('.closing-remarks-textbox').hide();
+            });
+
+
+            $('#publicHolidayErrorSummary').hide();
+            $('#documentDiv').hide();
+            //var counsellingPsychomatricTest= $("input[name='Counselling.PsychomatricTest']:checked").val();
+            //if (counsellingPsychomatricTest == "No") {
+            //    $('#quickActions').hide();
+            //} else {
+            //    $('#quickActions').show();
+            //}
+            var daterangepickerOptions = {
+                autoApply: true,
+                singleDatePicker: true,
+                showDropdowns: true,
+                showCustomRangeLabel: false,
+                opens: 'left',
+                minDate: moment(),
+                //maxDate: moment().add('2', 'days').format('DD MMMM YYYY'),
+                onSelect: function () {
+                    selectedDate = moment().format('DD MMMM YYYY');
+                },
+                locale: {
+                    "format": "DD MMMM YYYY"
+                }
+            };
+
+            //$('#psychomatricTestYes').click(function () {
+            //    $('#quickActions').show();
+            //});
+
+            //$('#psychomatricTestNo').click(function () {
+            //    $('#quickActions').hide();
+            //});
+
+            jQuery(function () {
+                jQuery(".date").daterangepicker(daterangepickerOptions);
+                $('#FollowUpDate').val(moment().format('DD MMMM YYYY'));
+                $(".generated .date").on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('DD MMMM YYYY'));
+                });
+            });
+
+            $("#uploadDocument").click(function() {
+                window.location.href="/Counselling/Upload/"+@Model.Counselling.EnquiryId;
+            });
+        });
+
+        $('#closeYes').click(function () {
+            $('.close-textbox').show();
+        });
+
+        $('#closeNo').click(function () {
+            $('.close-textbox').hide();
+        });
+
+        if (!$('#Counselling_Close').is(':checked')) {
+            $('.close-textbox').hide();
+        } else {
+            $('.close-textbox').show();
+        }
+
+        $('#Counselling_SectorId').change(function () {
+            var sectorId = $('#Counselling_SectorId :selected').val();
+            $.ajax({
+                url: '/Counselling/GetCourse',
+                type: 'POST',
+                data: JSON.stringify({ sectorId: sectorId }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                error: function (xhr) {
+                    alert('Error: ' + xhr.statusText);
+                },
+                success: function (result) {
+                    $("#Counselling_CourseOfferedId").empty();
+                    $.each(result, function (key, value) {
+                        $("#Counselling_CourseOfferedId").append($("<option></option>").val(value.CourseId).html(value.Name));
+
+                    });
+                },
+                async: true,
+                processData: false
+            });
+        });
+    </script>
+}

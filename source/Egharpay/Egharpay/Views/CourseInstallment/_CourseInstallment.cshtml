@@ -1,0 +1,51 @@
+﻿@model Egharpay.Models.CourseInstallmentViewModel
+<div class="form-control-required-example"> = Required</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CourseInstallment.Name, "Course Fee BreakUp", new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        @Html.TextBoxFor(model => model.CourseInstallment.Name, new { @class = "form-control col-md-7 col-xs-12" })
+        @Html.ValidationMessageFor(model => model.CourseInstallment.Name, "", new { @class = "help-block" })
+    </div>
+</div>
+
+
+<div class="form-group ">
+    @Html.LabelFor(model => model.CourseInstallment.CourseId, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        @Html.DropDownListFor(model => model.CourseInstallment.CourseId, Model.Courses, "Select Course", new { @class = "form-control col-md-7 col-xs-12" })
+        @Html.ValidationMessageFor(model => model.CourseInstallment.CourseId, "", new { @class = "help-block" })
+    </div>
+</div>
+
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CourseInstallment.Fee, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        @Html.TextBoxFor(model => model.CourseInstallment.Fee, new { @class = "form-control col-md-7 col-xs-12" })
+        @Html.ValidationMessageFor(model => model.CourseInstallment.Fee, "", new { @class = "help-block" })
+    </div>
+</div>
+
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CourseInstallment.DownPayment, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+    <div class="col-md-6 col-sm-6 col-xs-12 calculate">
+        @Html.TextBoxFor(model => model.CourseInstallment.DownPayment, new { @class = "form-control col-md-7 col-xs-12" })
+        @Html.ValidationMessageFor(model => model.CourseInstallment.DownPayment, "", new { @class = "help-block" })
+    </div>
+</div>
+
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CourseInstallment.LumpsumAmount, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        @Html.TextBoxFor(model => model.CourseInstallment.LumpsumAmount, new { @class = "form-control col-md-7 col-xs-12" })
+        @Html.ValidationMessageFor(model => model.CourseInstallment.LumpsumAmount, "", new { @class = "help-block" })
+    </div>
+</div>
+
+

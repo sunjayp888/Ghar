@@ -1,0 +1,127 @@
+﻿@model Egharpay.Models.FollowUpViewModel
+@{
+    ViewBag.Title = string.Format("Edit Follow-Up ({0})", Model.FollowUp.FirstName);
+}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>@Model.FollowUp.FirstName<small>Edit Follow-Up</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @if (ViewContext.ViewData.ModelState.Any(x => x.Key == ""))
+                        {
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+                                    @Html.ValidationSummary(false, null, new { @class = "row alert alert-error" })
+                                </div>
+                            </div>
+
+                        }
+                        @Html.HiddenFor(model => Model.FollowUp.FollowUpId)
+                        @Html.HiddenFor(model => Model.FollowUp.Title)
+                        @Html.HiddenFor(model => Model.FollowUp.MobilizationId)
+                        @Html.HiddenFor(model => Model.FollowUp.EnquiryId)
+                        @Html.HiddenFor(model => Model.FollowUp.CounsellingId)
+                        @Html.HiddenFor(model => Model.FollowUp.ReadDateTime)
+                        @Html.HiddenFor(model => Model.FollowUp.CreatedDateTime)
+                        @Html.HiddenFor(model => Model.FollowUp.CentreId)
+                        @Html.HiddenFor(model => Model.FollowUp.IntrestedCourseId)
+                        @Html.HiddenFor(model => Model.FollowUp.FollowUpType)
+                        @Html.HiddenFor(model => Model.FollowUp.FollowUpUrl)
+                        @Html.Partial("_FollowUp", Model)
+                        
+                        <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">Close</label>
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <div id="close" class="btn-group" data-toggle="buttons">
+                                    <label id="yesRadioButton" class='@(Model.FollowUp.Close == "Yes" ? "btn btn-primary active" : "btn btn-default")' data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                        @Html.RadioButtonFor(model => model.FollowUp.Close, "Yes")
+                                        <input type="radio" name="close" value="Yes" data-parsley-multiple="gender"> &nbsp; Yes &nbsp;
+                                    </label>
+                                    <label id="noRadioButton" class='@(Model.FollowUp.Close == "No"|| Model.FollowUp.Close==null ? "btn btn-primary active" : "btn btn-default")' data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                        @Html.RadioButtonFor(model => model.FollowUp.Close, "No")
+                                        <input type="radio" name="close" value="No" data-parsley-multiple="gender"> No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group closing-remarks-textbox">
+                            @Html.LabelFor(model => model.FollowUp.ClosingRemark, new { @class = "control-label col-md-4 col-sm-4 col-xs-12" })
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                @Html.EditorFor(model => model.FollowUp.ClosingRemark, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.FollowUp.ClosingRemark, "", new { @class = "help-block" })
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a href="@Url.Action("Index")" class="btn btn-primary" role="button">
+        <span class="fa fa-chevron-left"></span>&nbsp;Back to list
+    </a>
+</div>
+@section scripts {
+
+    <script>
+        $(function () {
+
+            $('#publicHolidayErrorSummary').hide();
+            var daterangepickerOptions = {
+                autoApply: true,
+                singleDatePicker: true,
+                showDropdowns: true,
+                showCustomRangeLabel: false,
+                opens: 'left',
+                minDate: moment(),
+                //maxDate: moment().add('2', 'days').format('DD MMMM YYYY'),
+                onSelect: function () {
+                    selectedDate = moment().format('DD MMMM YYYY');
+                },
+                locale: {
+                    "format": "DD MMMM YYYY"
+                }
+            };
+
+            jQuery(function () {
+                jQuery(".date").daterangepicker(daterangepickerOptions);
+                $('#GeneratedDate').val(moment().format('DD MMMM YYYY'));
+                $(".generated .date").on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('DD MMMM YYYY'));
+                });
+            });
+        });
+
+        if (!$('#FollowUp_Close').is(':checked')) {
+            $('.closing-remarks-textbox').hide();
+        } else {
+            $('.closing-remarks-textbox').show();
+        }
+
+        $('#yesRadioButton').click(function () {
+            $('.closing-remarks-textbox').show();
+        });
+
+        $('#noRadioButton').click(function () {
+            $('.closing-remarks-textbox').hide();
+        });
+    </script>
+}

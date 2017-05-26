@@ -1,0 +1,203 @@
+﻿@model Egharpay.Models.EnquiryViewModel
+@{
+    ViewBag.Title = string.Format("Edit Enquiry ({0})", Model.Enquiry.FirstName);
+}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>@string.Format("{0} {1} {2}", Model.Enquiry.FirstName,Model.Enquiry.MiddleName,Model.Enquiry.LastName)<small>Edit Enquiry</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                @using (Html.BeginForm())
+            {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @if (ViewContext.ViewData.ModelState.Any(x => x.Key == ""))
+                        {
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+                                    @Html.ValidationSummary(false, null, new { @class = "row alert alert-error" })
+                                </div>
+                            </div>
+
+                        }
+                        @Html.HiddenFor(model => Model.Enquiry.EnquiryId)
+                        @Html.HiddenFor(model => Model.Enquiry.EnquiryDate)
+                        @Html.Partial("_Enquiry", Model)
+                        <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+                           
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Enquiry.RemarkByBranchManager, new { @class = "control-label col-md-4 col-sm-4 col-xs-12" })
+                                <div class="col-md-8 col-sm-4 col-xs-12">
+                                    @Html.EditorFor(model => model.Enquiry.RemarkByBranchManager, new { @class = "form-control col-md-7 col-xs-12" })
+                                    @Html.ValidationMessageFor(model => model.Enquiry.RemarkByBranchManager, "", new { @class = "help-block" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3 pull-right">
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                    <a href="@Url.Action("Create", "Counselling", new { id = Model.Enquiry.EnquiryId })" class="btn btn-primary" role="button">
+                                        Create Counselling
+                                    </a>
+                                    <a href="@Url.Action("Create", "Registration", new { id = Model.Enquiry.EnquiryId })" class="btn btn-primary" role="button">
+                                        Create Registration
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a href="@Url.Action("Index")" class="btn btn-primary" role="button">
+        <span class="fa fa-chevron-left"></span>&nbsp;Back to list
+    </a>
+</div>
+
+@section scripts {
+    <script>
+        if ($('#Enquiry_SectorId :selected').text() == "Others") {
+            $('.other-interested-course-textbox').show();
+        } else {
+            $('.other-interested-course-textbox').hide();
+        }
+
+        if ($('#Enquiry_IntrestedCourseId :selected').text() == "Others") {
+            $('.other-interested-course-textbox').show();
+        } else {
+            $('.other-interested-course-textbox').hide();
+        }
+
+        $("#Enquiry_SectorId").change(function () {
+            if ($('#Enquiry_SectorId :selected').text() == "Others") {
+                $('.other-interested-course-textbox').show();
+            } else {
+                $('.other-interested-course-textbox').hide();
+            }
+        });
+
+        $("#Enquiry_IntrestedCourseId").change(function () {
+            if ($('#Enquiry_IntrestedCourseId :selected').text() == "Others") {
+                $('.other-interested-course-textbox').show();
+            } else {
+                $('.other-interested-course-textbox').hide();
+            }
+        });
+        jQuery(function () {
+
+            if (!$('#Enquiry_Close').is(':checked')) {
+                $('.closing-remarks-textbox').hide();
+            } else {
+                $('.closing-remarks-textbox').show();
+            }
+
+            $('#yesRadioButton').click(function () {
+                $('.closing-remarks-textbox').show();
+            });
+
+            $('#noRadioButton').click(function () {
+                $('.closing-remarks-textbox').hide();
+            });
+
+            if ($('#Enquiry_PreTrainingStatus').is(':checked')) {
+                $('.experience-year-textbox').hide();
+            } else {
+                $('.experience-year-textbox').show();
+            }
+
+            $('#experienceRadioButton').click(function () {
+                $('.experience-year-textbox').show();
+            });
+
+            $('#fresherRadioButton').click(function () {
+                $('.experience-year-textbox').hide();
+            });
+
+            if (!$('#Enquiry_EmploymentStatus').is(':checked')) {
+                $('.employment-status-textbox').hide();
+            } else {
+                $('.employment-status-textbox').show();
+            }
+
+            $('#employedRadioButton').click(function () {
+                $('.employment-status-textbox').show();
+            });
+
+            $('#unemployedRadioButton').click(function () {
+                $('.employment-status-textbox').hide();
+            });
+
+            jQuery(".end-date, .termination-date").remove();
+
+            jQuery(".date").daterangepicker({
+                autoApply: true,
+                singleDatePicker: true,
+                showDropdowns: true,
+                showCustomRangeLabel: false,
+                opens: 'left',
+                startDate: '@Model.Enquiry.EnquiryDate.Value.ToString("dd/MMMM/yyyy")',
+                locale: {
+                    format: 'DD MMMM YYYY'
+                }
+            });
+            jQuery(".followUpDate").daterangepicker({
+                autoApply: true,
+                singleDatePicker: true,
+                showDropdowns: true,
+                showCustomRangeLabel: false,
+                opens: 'left',
+                locale: {
+                    format: 'DD MMMM YYYY'
+                }
+            });
+        });
+
+        //$('.closing-remarks-textbox').hide();
+
+        //$('#yesRadioButton').click(function () {
+        //    $('.closing-remarks-textbox').show();
+        //});
+
+        //$('#noRadioButton').click(function () {
+        //    $('.closing-remarks-textbox').hide();
+        //});
+
+        //if (!$('#Enquiry_Close').is(':checked')) {
+        //    $('.closing-remarks-textbox').hide();
+        //} else {
+        //    $('.closing-remarks-textbox').show();
+        //}
+
+        //$('#Enquiry_SchemeId').ready(function () {
+        //    var schemeId = $('#Enquiry_SchemeId :selected').val();
+        //    $.ajax({
+        //        url: '/Enquiry/GetSector',
+        //        type: 'POST',
+        //        data: JSON.stringify({ schemeId: schemeId }),
+        //        dataType: 'json',
+        //        contentType: 'application/json; charset=utf-8',
+        //        error: function (xhr) {
+        //            alert('Error: ' + xhr.statusText);
+        //        },
+        //        success: function (result) {
+        //            $("#Enquiry_SectorId").empty();
+        //            $.each(result, function (key, value) {
+        //                $("#Enquiry_SectorId").append($("<option></option>").val(value.SectorId).html(value.Name));
+
+        //            });
+        //        },
+        //        async: true,
+        //        processData: false
+        //    });
+        //});
+    </script>
+}
