@@ -383,6 +383,14 @@
     <Content Include="bower_components\font-awesome\css\font-awesome.min.css" />
     <Content Include="bower_components\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="bower_components\font-awesome\HELP-US-OUT.txt" />
+    <Content Include="bower_components\gentelella\build\css\custom.css" />
+    <Content Include="bower_components\gentelella\build\css\custom.min.css" />
+    <Content Include="bower_components\gentelella\build\js\custom.js" />
+    <Content Include="bower_components\gentelella\build\js\custom.min.js" />
+    <Content Include="bower_components\gentelella\gulpfile.js" />
+    <Content Include="bower_components\gentelella\LICENSE.txt" />
+    <Content Include="bower_components\gentelella\src\js\custom.js" />
+    <Content Include="bower_components\gentelella\src\js\helper.js" />
     <Content Include="bower_components\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
     <Content Include="bower_components\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
     <Content Include="bower_components\jquery-validation-unobtrusive\LICENSE.txt" />
@@ -2037,6 +2045,12 @@
     <Content Include="bower_components\cropper\src\scss\_mixins.scss" />
     <Content Include="bower_components\cropper\src\scss\_utilities.scss" />
     <Content Include="bower_components\cropper\src\scss\_variables.scss" />
+    <Content Include="bower_components\gentelella\.bower.json" />
+    <Content Include="bower_components\gentelella\bower.json" />
+    <Content Include="bower_components\gentelella\changelog.md" />
+    <Content Include="bower_components\gentelella\package.json" />
+    <Content Include="bower_components\gentelella\README.md" />
+    <Content Include="bower_components\gentelella\src\scss\custom.scss" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -2499,6 +2513,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="bower_components\gentelella\vendors\" />
     <Folder Include="Views\Document\" />
     <Folder Include="Views\Graph\" />
   </ItemGroup>

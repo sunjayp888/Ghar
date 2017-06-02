@@ -11,6 +11,7 @@
     <title>@ViewBag.Title - Egharpay</title>
     @Styles.Render("~/Content/bower")
     @Styles.Render("~/Content/Inspinia")
+    @Styles.Render("~/Content/bower/gentelella")
     @Styles.Render("~/Content/Application")
     <meta name="description" content="Egharpay" />
 </head>
@@ -37,12 +38,11 @@
                                 {
                                     <li>
                                         <a><i class="fa fa-cogs"></i> Mobilization <span class="fa fa-chevron-up"></span></a>
-                                        <ul class="nav child_menu">
-                                        </ul>
+                                        <ul class="nav child_menu"></ul>
                                     </li>
                                 }
-                                @if (User.IsInAnyRoles("Admin"))
-                                {
+                                @*@if (User.IsInAnyRoles("Admin"))
+                                {*@
                                     <li>
                                         <a><i class="fa fa-cogs"></i> Settings <span class="fa fa-chevron-up"></span></a>
                                         <ul class="nav child_menu">
@@ -52,12 +52,10 @@
                                             }
                                             <li><a href='@Url.Action("Index", "Centre")'>Centre</a></li>
                                             <li><a href='@Url.Action("Index", "Personnel")'>Personnel</a></li>
-                                            {
-                                                <li><a href="@Url.Action("Index", "User")">Users</a></li>
-                                            }
+                                            <li><a href="@Url.Action("Index", "User")">Users</a></li>
                                         </ul>
                                     </li>
-                                }
+                                @*}*@
                             </ul>
                         </div>
 
@@ -136,6 +134,7 @@
     }
     @Scripts.Render("~/Scripts/bower")
     @Scripts.Render("~/Scripts/Inspinia")
+    @Scripts.Render("~/Scripts/bower/gentelella")
     @Scripts.Render("~/Scripts/Application")
     @RenderSection("scripts", required: false)
     <script>

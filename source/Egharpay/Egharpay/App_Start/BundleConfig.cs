@@ -27,10 +27,6 @@ namespace Egharpay
                 "~/bower_components/cropper/dist/cropper.min.js"
                 ));
 
-            bundles.Add(new ScriptBundle("~/Scripts/Inspinia").Include(
-                "~/scripts/js/inspinia.js"
-                ));
-
             bundles.Add(new ScriptBundle("~/Scripts/Application").Include(
                 "~/Scripts/Angular/Moment.js",
                 "~/Scripts/Angular/app.js",
@@ -63,6 +59,11 @@ namespace Egharpay
                 "~/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css"
                 ));
 
+            bundles.Add(new StyleBundle("~/Content/bower/gentelella").Include(
+               "~/bower_components/gentelella/build/css/custom.min.css",
+               "~/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css"
+               ));
+
             bundles.Add(new StyleBundle("~/Content/getOrgChart").Include(
                 "~/Scripts/getorgchart.css"
                  ));
@@ -71,7 +72,19 @@ namespace Egharpay
                 "~/Content/css/Site.min.css"
                 ));
 
+            bundles.Add(new ScriptBundle("~/Scripts/bower/gentelella").Include(
+             "~/bower_components/gentelella/build/js/custom.min.js"
+             ));
+
+            bundles.Add(new ScriptBundle("~/Scripts/Inspinia").Include(
+               "~/Scripts/plugins/metisMenu/metisMenu.min.js",
+               "~/Scripts/plugins/pace/pace.min.js",
+               "~/scripts/js/inspinia.js"
+               ));
+
+
             //BundleTable.EnableOptimizations = true;
+           
         }
     }
 }
