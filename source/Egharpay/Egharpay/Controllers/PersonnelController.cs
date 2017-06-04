@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -34,8 +35,13 @@ namespace Egharpay.Controllers
             }
         }
 
-        public PersonnelController(IEgharpayBusinessService hrBusinessService) : base(hrBusinessService)
+        private IPersonnelBusinessService _personnelBusinessService;
+        private IEgharpayBusinessService _egharpayBusinessService;
+
+        public PersonnelController(IPersonnelBusinessService personnelBusinessService, IEgharpayBusinessService egharpayBusinessService) : base(egharpayBusinessService)
         {
+            _personnelBusinessService = personnelBusinessService;
+            _egharpayBusinessService = egharpayBusinessService;
         }
 
         // GET: Personnel
@@ -47,27 +53,21 @@ namespace Egharpay.Controllers
 
         // GET: Personnel/Profile/{id}
         [AuthorizePersonnel(Roles = "Admin,User")]
-        public new ActionResult Profile(int id)
+        public async Task<ActionResult> Profile(int id)
         {
-            var organisationId = UserOrganisationId;
-            var personnelId = UserPersonnelId;
-            var personnel = EgharpayBusinessService.RetrievePersonnel(UserOrganisationId, id);
+            var personnel = await _personnelBusinessService.RetrievePersonnel(UserOrganisationId, id);
             if (personnel == null)
             {
                 return HttpNotFound();
             }
-
             var isAdmin = User.IsInAnyRoles("Admin");
-            List<int> selectedCompanyIds = null;
-            List<int> selectedDepartmentIds = null;
-            List<int> selectedDivisionIds = null;
             if (!isAdmin)
             {
             }
             var viewModel = new PersonnelProfileViewModel
             {
                 Personnel = personnel,
-                Permissions = EgharpayBusinessService.RetrievePersonnelPermissions(isAdmin, UserOrganisationId, UserPersonnelId, id),
+                //Permissions = EgharpayBusinessService.RetrievePersonnelPermissions(isAdmin, UserOrganisationId, UserPersonnelId, id),
                 //PhotoBytes = EgharpayBusinessService.RetrievePhoto(organisationId, id)
             };
             return View(viewModel);
@@ -81,7 +81,7 @@ namespace Egharpay.Controllers
             var centres = EgharpayBusinessService.RetrieveCentres(UserOrganisationId, e => true);
             var viewModel = new PersonnelProfileViewModel
             {
-                
+
                 Centres = new SelectList(centres, "CentreId", "Name"),
                 Personnel = new Personnel
                 {
@@ -104,31 +104,26 @@ namespace Egharpay.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PersonnelProfileViewModel personnelViewModel)
+        public async Task<ActionResult> Create(PersonnelProfileViewModel personnelViewModel)
         {
             // check if user with this email already exists for the current organisation
-            var centres = EgharpayBusinessService.RetrieveCentres(UserOrganisationId, e => true);
+            // var centres = EgharpayBusinessService.RetrieveCentres(UserOrganisationId, e => true);
             var userExists = UserManager.FindByEmail(personnelViewModel.Personnel.Email);
-            personnelViewModel.Centres = new SelectList(centres, "CentreId", "Name");
+            // personnelViewModel.Centres = new SelectList(centres, "CentreId", "Name");
             if (userExists != null)
                 ModelState.AddModelError("", string.Format("An account already exists for the email address {0}", personnelViewModel.Personnel.Email));
 
             if (ModelState.IsValid)
             {
                 //Create Personnel
-                personnelViewModel.Personnel.CentreId = personnelViewModel.Personnel.CentreId == 0? UserCentreId:personnelViewModel.Personnel.CentreId;
-                personnelViewModel.Personnel = EgharpayBusinessService.CreatePersonnel(UserOrganisationId, personnelViewModel.Personnel);
-                //var trainer =  EgharpayBusinessService.CreateTrainer
-                //create personnel
-                //var personnel = new Personnel(){set all mandatory field like forename }
-                //CreateTrainerUserAndRole(personnel)
-
-                var result = CreateUserAndRole(personnelViewModel.Personnel);
+                personnelViewModel.Personnel.CentreId = personnelViewModel.Personnel.CentreId == 0 ? UserCentreId : personnelViewModel.Personnel.CentreId;
+                var result = await _personnelBusinessService.CreatePersonnel(personnelViewModel.Personnel);
                 if (result.Succeeded)
+                {
+                    CreateUserAndRole(personnelViewModel.Personnel);
                     return RedirectToAction("Index");
-
-                //delete the orphaned personnel & employment records
-                EgharpayBusinessService.DeletePersonnel(UserOrganisationId, personnelViewModel.Personnel.PersonnelId);
+                }
+                ModelState.AddModelError("", result.Exception);
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error);
@@ -156,43 +151,23 @@ namespace Egharpay.Controllers
             return result;
         }
 
-        //private IdentityResult CreateTrainerUserAndRole(Personnel personnel)
-        //{
-        //    var createUser = new ApplicationUser
-        //    {
-        //        UserName = personnel.Email,
-        //        Email = personnel.Email,
-        //        OrganisationId = UserOrganisationId,
-        //        PersonnelId = personnel.PersonnelId,
-        //        CentreId = personnel.CentreId
-        //    };
-
-        //    var roleId = RoleManager.Roles.FirstOrDefault(r => r.Name == "Admin").Id;
-        //    createUser.Roles.Add(new IdentityUserRole { UserId = createUser.Id, RoleId = roleId });
-
-        //    var result = UserManager.Create(createUser, "Password1!");
-        //    return result;
-        //}
-
-        // GET: Personnel/Edit/{id}
         [AuthorizePersonnel(Roles = "Admin,User")]
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var personnel = EgharpayBusinessService.RetrievePersonnel(UserOrganisationId, id.Value);
+            var personnel = await _personnelBusinessService.RetrievePersonnel(UserOrganisationId, id.Value);
             if (personnel == null)
             {
                 return HttpNotFound();
             }
-            var centres = EgharpayBusinessService.RetrieveCentres(UserOrganisationId, e => true);
-           
+            //   var centres = EgharpayBusinessService.RetrieveCentres(UserOrganisationId, e => true);
             personnel.Email = UserManager.FindByPersonnelId(personnel.PersonnelId)?.Email;
             var viewModel = new PersonnelProfileViewModel
             {
-                Centres = new SelectList(centres, "CentreId", "Name"),
+                //        Centres = new SelectList(centres, "CentreId", "Name"),
                 Personnel = personnel
             };
             return View(viewModel);
@@ -202,21 +177,23 @@ namespace Egharpay.Controllers
         [AuthorizePersonnel(Roles = "Admin,User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(PersonnelProfileViewModel personnelViewModel)
+        public async Task<ActionResult> Edit(PersonnelProfileViewModel personnelViewModel)
         {
             if (ModelState.IsValid)
             {
 
-                personnelViewModel.Personnel = EgharpayBusinessService.UpdatePersonnel(UserOrganisationId, personnelViewModel.Personnel);
+                var resultData = await _personnelBusinessService.UpdatePersonnel(personnelViewModel.Personnel);
+                if (resultData.Succeeded)
+                {
+                    var editUser = UserManager.FindByPersonnelId(personnelViewModel.Personnel.PersonnelId);
+                    editUser.Email = personnelViewModel.Personnel.Email;
 
-                var editUser = UserManager.FindByPersonnelId(personnelViewModel.Personnel.PersonnelId);
-                editUser.Email = personnelViewModel.Personnel.Email;
-
-                var result = UserManager.Update(editUser);
-                if (result.Succeeded)
-                    return RedirectToAction("Index");
-
-                foreach (var error in result.Errors)
+                    var result = UserManager.Update(editUser);
+                    if (result.Succeeded)
+                        return RedirectToAction("Index");
+                }
+                ModelState.AddModelError("", resultData.Exception);
+                foreach (var error in resultData.Errors)
                 {
                     ModelState.AddModelError("", error);
                 }
@@ -281,15 +258,16 @@ namespace Egharpay.Controllers
         }
 
         [HttpPost]
-        public ActionResult List(Paging paging, List<OrderBy> orderBy)
+        public async Task<ActionResult> List(Paging paging, List<OrderBy> orderBy)
         {
-            return this.JsonNet(EgharpayBusinessService.RetrievePersonnel(UserOrganisationId, UserCentreId, orderBy, paging));
+            var data = await _personnelBusinessService.RetrievePersonnels(UserCentreId, orderBy, paging);
+            return this.JsonNet(data);
         }
 
         [HttpPost]
-        public ActionResult Search(string searchKeyword, Paging paging, List<OrderBy> orderBy)
+        public async Task<ActionResult> Search(string searchKeyword, Paging paging, List<OrderBy> orderBy)
         {
-            return this.JsonNet(EgharpayBusinessService.RetrievePersonnelBySearchKeyword(UserOrganisationId, searchKeyword, orderBy, paging));
+            return this.JsonNet(await _personnelBusinessService.Search(UserCentreId, searchKeyword, orderBy, paging));
         }
 
 

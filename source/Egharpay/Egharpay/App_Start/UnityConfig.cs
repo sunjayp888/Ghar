@@ -1,14 +1,17 @@
 using System;
-using System.Configuration;
 using Microsoft.Practices.Unity;
 using Egharpay.Business;
 using Egharpay.Business.Interfaces;
+using Egharpay.Business.Services;
 using Egharpay.Data;
 using Egharpay.Data.Interfaces;
 using Egharpay.Data.Models;
+using Egharpay.Data.Services;
 using Egharpay.Interfaces;
 using Egharpay.Document.Interfaces;
 using Egharpay.Document;
+using System.Linq;
+using System.Data.Entity;
 
 namespace Egharpay
 {
@@ -57,13 +60,32 @@ namespace Egharpay
             // let's enforce a singleton on CacheProvider, even though it accesses a static MemoryCache.Default
             container.RegisterType<ICacheProvider, MemoryCacheProvider>(new ContainerControlledLifetimeManager());
             container.RegisterType<IPersonnelDataService, PersonnelDataService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IPersonnelTestDataService, PersonnelTestDataService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IPersonnelBusinessService, PersonnelBusinessService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IEgharpayBusinessService, EgharpayBusinessService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ITenantOrganisationService, EgharpayBusinessService>(new ContainerControlledLifetimeManager());
-           // container.RegisterType<ITemplateService, TemplateService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IGenericDataService<DbContext>, EntityFrameworkGenericDataService>();
+            // container.RegisterType<ITemplateService, TemplateService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IEmailService, EmailService>(new ContainerControlledLifetimeManager(),
                 new InjectionConstructor(
                     new InjectionParameter<string>(ConfigHelper.OverrideEmailAddresses)
                 )
+            );
+
+            // Register everything in these namespaces based on convention:
+            var conventionBasedMappings = new[]
+            {
+                "Egharpay.Data.Services",
+                "Egharpay.Data.Interfaces",
+                "Egharpay.Business.Services",
+                "Egharpay.Business.Interfaces",
+            };
+
+            container.RegisterTypes(
+               AllClasses.FromLoadedAssemblies().Where(tt => conventionBasedMappings.Any(n => n == tt.Namespace)),
+               WithMappings.FromMatchingInterface,
+               //getName: new Func<Type, string>(t => t.Name)
+               WithName.Default
             );
 
             container.RegisterType<IDocumentService, DocumentService>(new ContainerControlledLifetimeManager());

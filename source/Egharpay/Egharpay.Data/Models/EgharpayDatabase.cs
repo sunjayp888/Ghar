@@ -12,6 +12,7 @@ namespace Egharpay.Data.Models
         {
         }
 
+        public virtual DbSet<PersonnelGrid> PersonnelGrids { get; set; }
         public virtual DbSet<AspNetUsersAlertSchedule> AspNetUsersAlertSchedules { get; set; }
         public virtual DbSet<Host> Hosts { get; set; }
         public virtual DbSet<Organisation> Organisations { get; set; }
@@ -21,6 +22,7 @@ namespace Egharpay.Data.Models
         public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<DocumentType> DocumentTypes { get; set; }
         public virtual DbSet<Template> Templates { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
           
@@ -100,6 +102,34 @@ namespace Egharpay.Data.Models
 
             modelBuilder.Entity<Centre>()
                 .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<PersonnelGrid>()
+               .Property(e => e.Telephone)
+               .IsUnicode(false);
+
+            modelBuilder.Entity<PersonnelGrid>()
+                .Property(e => e.Mobile)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<PersonnelGrid>()
+                .Property(e => e.NINumber)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<PersonnelGrid>()
+                .Property(e => e.BankAccountNumber)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<PersonnelGrid>()
+                .Property(e => e.BankSortCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<PersonnelGrid>()
+                .Property(e => e.BankTelephone)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<PersonnelGrid>()
+                .Property(e => e.Email)
                 .IsUnicode(false);
 
             base.OnModelCreating(modelBuilder);

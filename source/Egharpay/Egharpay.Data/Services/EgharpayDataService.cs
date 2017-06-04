@@ -14,13 +14,13 @@ namespace Egharpay.Data.Services
     /// <summary>
     /// 
     /// </summary>
-    public class TempDataService : IEgharpayDataService
+    public class EgharpayDataService : IEgharpayDataService
     {
         protected readonly IEgharpayDatabaseFactory<EgharpayDatabase> _databaseFactory;
         protected readonly IGenericDataService<DbContext> _genericDataService;
         protected TransactionScope ReadUncommitedTransactionScope => new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
         protected TransactionScope ReadUncommitedTransactionScopeAsync => new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted }, TransactionScopeAsyncFlowOption.Enabled);
-        public TempDataService(IEgharpayDatabaseFactory<EgharpayDatabase> databaseFactory, IGenericDataService<DbContext> genericDataService)
+        public EgharpayDataService(IEgharpayDatabaseFactory<EgharpayDatabase> databaseFactory, IGenericDataService<DbContext> genericDataService)
         {
             _databaseFactory = databaseFactory;
             _genericDataService = genericDataService;

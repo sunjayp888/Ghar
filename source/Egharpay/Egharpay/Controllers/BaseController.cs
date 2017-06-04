@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using Egharpay.Business;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Egharpay.Business.Interfaces;
@@ -21,6 +22,10 @@ namespace Egharpay.Controllers
             {
                 return _EgharpayBusinessService;
             }
+        }
+
+        public BaseController()
+        {
         }
 
         public BaseController(IEgharpayBusinessService EgharpayBusinessService)
