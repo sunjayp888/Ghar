@@ -70,6 +70,24 @@ namespace Egharpay.Models
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "Firstname")]
+        [StringLength(100, ErrorMessage = "The Firstname field is required.")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Lastname")]
+        [StringLength(100, ErrorMessage = "The Lastname field is required.")]
+        public string LastName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Pincode")]
+        [StringLength(100, ErrorMessage = "The Pincode field is required.")]
+        public string Pincode { get; set; }
+
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
