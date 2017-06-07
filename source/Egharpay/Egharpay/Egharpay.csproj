@@ -2114,8 +2114,6 @@
     <Content Include="Scripts\getorgchart.js" />
     <Content Include="Scripts\graphics.png" />
     <Content Include="Scripts\jquery-validate-bootstrap.js" />
-    <Content Include="Scripts\js\bootstrap.js" />
-    <Content Include="Scripts\js\bootstrap.min.js" />
     <Content Include="Scripts\js\demo\chartjs-demo.js" />
     <Content Include="Scripts\js\demo\dashboard-demo.js" />
     <Content Include="Scripts\js\demo\flot-demo.js" />
@@ -2125,8 +2123,6 @@
     <Content Include="Scripts\js\demo\rickshaw-demo.js" />
     <Content Include="Scripts\js\demo\sparkline-demo.js" />
     <Content Include="Scripts\js\inspinia.js" />
-    <Content Include="Scripts\js\jquery-2.1.1.js" />
-    <Content Include="Scripts\js\jquery-3.1.1.min.js" />
     <Content Include="Scripts\js\plugins\blueimp\jquery.blueimp-gallery.min.js" />
     <Content Include="Scripts\js\plugins\bootstrap-markdown\bootstrap-markdown.js" />
     <Content Include="Scripts\js\plugins\bootstrap-markdown\markdown.js" />

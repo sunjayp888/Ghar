@@ -36,8 +36,7 @@ namespace Egharpay
                 "~/Scripts/Angular/Services/*.js",
                 "~/Scripts/Angular/Filters/*.js",
                 "~/Scripts/Angular/Directives/*.js",
-                "~/Scripts/jquery-validate-bootstrap.js",
-                "~/Scripts/js/*.js"
+                "~/Scripts/jquery-validate-bootstrap.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/Scripts/getOrgChart").Include(
@@ -72,16 +71,16 @@ namespace Egharpay
                 "~/Content/css/Site.min.css"
                 ));
 
-            bundles.Add(new ScriptBundle("~/Scripts/bower/gentelella").Include(
-             "~/bower_components/gentelella/build/js/custom.min.js"
-             ));
+            //bundles.Add(new ScriptBundle("~/Scripts/bower/gentelella").Include(
+            // "~/bower_components/gentelella/build/js/custom.min.js"
+            // ));
 
             bundles.Add(new ScriptBundle("~/Scripts/Inspinia").Include(
-               "~/Scripts/plugins/metisMenu/metisMenu.min.js",
-               "~/Scripts/plugins/pace/pace.min.js",
-               "~/scripts/js/inspinia.js"
+               "~/Scripts/js/plugins/slimscroll/jquery.slimscroll.min.js",
+               "~/Scripts/js/plugins/metisMenu/jquery.metisMenu.js",
+               "~/Scripts/js/plugins/pace/pace.min.js",
+               "~/Scripts/js/inspinia.js"
                ));
-
 
             //BundleTable.EnableOptimizations = true;
            
