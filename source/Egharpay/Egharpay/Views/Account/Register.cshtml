@@ -12,7 +12,7 @@
     @*<div class="form-group">
             @Html.ValidationSummary("", new { @class = "help-block" })
         </div>*@
-    <div class="middle-box text-center loginscreen   animated fadeInDown">
+    <div class="middle-box text-center loginscreen animated fadeInDown" ng-controller="model as RegisterController">
         <div>
             @*<div>
                     <h1 class="logo-element">Egharpay</h1>
@@ -59,7 +59,7 @@
                 <p class="text-muted text-left">
                     <small>
                         <a>Find pincode?&nbsp;&nbsp;&nbsp;</a>
-                        OR <a data-toggle="modal" data-target="#myModal6" id="findZipCode">&nbsp;&nbsp;&nbsp; Get pincode from current location</a>
+                        OR <a ng-click="model.openPincodeModal()" id="findZipCode">&nbsp;&nbsp;&nbsp; Get pincode from current location</a>
                     </small>
                 </p>
                 <p class="text-muted text-right"><small></small></p>
@@ -69,25 +69,6 @@
                 <a class="btn btn-sm btn-white btn-block" href="@Url.Action("Login", "Pages")">Login</a>
             </form>
             <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
-        </div>
-        <div class="modal inmodal fade" id="myModal6" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">Modal title</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>
-                            <strong></strong>
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 }
