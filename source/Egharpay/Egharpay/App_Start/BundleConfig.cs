@@ -71,9 +71,9 @@ namespace Egharpay
                 "~/Content/css/Site.min.css"
                 ));
 
-            //bundles.Add(new ScriptBundle("~/Scripts/bower/gentelella").Include(
-            // "~/bower_components/gentelella/build/js/custom.min.js"
-            // ));
+            bundles.Add(new ScriptBundle("~/Scripts/bower/gentelella").Include(
+             "~/bower_components/gentelella/build/js/custom.min.js"
+             ));
 
             bundles.Add(new ScriptBundle("~/Scripts/Inspinia").Include(
                "~/Scripts/js/plugins/slimscroll/jquery.slimscroll.min.js",

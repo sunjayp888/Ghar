@@ -75,13 +75,11 @@ namespace Egharpay.Models
         public string FirstName { get; set; }
 
         [Required]
-        [EmailAddress]
         [Display(Name = "Lastname")]
         [StringLength(100, ErrorMessage = "The Lastname field is required.")]
         public string LastName { get; set; }
 
         [Required]
-        [EmailAddress]
         [Display(Name = "Pincode")]
         [StringLength(100, ErrorMessage = "The Pincode field is required.")]
         public string Pincode { get; set; }

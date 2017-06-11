@@ -2471,7 +2471,7 @@
     <Content Include="Scripts\moris\morris.min.js" />
     <Content Include="Scripts\moris\raphael-min.js" />
     <Content Include="Scripts\readme.txt" />
-    <Content Include="Scripts\Templates\PincodeModal.html" />
+    <Content Include="Scripts\Angular\Templates\PincodeModal.html" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
